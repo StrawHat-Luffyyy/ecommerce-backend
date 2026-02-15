@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
+import authRoutes from './routes/authRoutes.js';
 
 const app = express();
 
@@ -17,6 +18,9 @@ app.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+// Routes
+app.use('/api/auth', authRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
