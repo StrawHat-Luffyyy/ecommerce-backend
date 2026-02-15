@@ -1,18 +1,19 @@
-import dotenv from 'dotenv'
-import app from './app.js'
+import dotenv from "dotenv";
+dotenv.config();
+import prisma from "./config/db.js";
+import app from "./app.js";
 
-dotenv.config()
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT , () => {
-console.log(`\nServer running on port ${PORT}`);
-console.log(`➜  Local:   http://localhost:${PORT}/health`);
-})
+const server = app.listen(PORT, () => {
+  console.log(`\nServer running on port ${PORT}`);
+  console.log(`➜  Local:   http://localhost:${PORT}/health`);
+});
 
-process.on('SIGINT' ,() => {
-  console.log('Shutting down server...')
+process.on("SIGINT", () => {
+  console.log("Shutting down server...");
   server.close(() => {
-    console.log('Server closed!')
-    process.exit(0)
-  })
-})
+    console.log("Server closed!");
+    process.exit(0);
+  });
+});
