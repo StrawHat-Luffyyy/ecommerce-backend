@@ -1,5 +1,7 @@
 import bcrypt from "bcryptjs";
 import prisma from "../config/db.js";
+import { generateToken } from "../utils/jwt.js";
+import { use } from "react";
 
 export const register = async (req, res) => {
   try {
@@ -44,5 +46,54 @@ export const register = async (req, res) => {
       status: "error",
       message: "Internal Server Error",
     });
+  }
+};
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ status: "error", message: "Email and password required" });
+    }
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return res
+        .status(401)
+        .json({ status: "error", message: "Invalid credentials" });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ status: "error", message: "Invalid credentials" });
+    }
+    const { accessToken, refreshToken } = generateToken(user.id);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken },
+    });
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV == "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    res.status(200).json({
+      status: "success",
+      data: {
+        accessToken,
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          role: user.role,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Login Error:", error);
+    res.status(500).json({ status: "error", message: "Internal Server Error" });
   }
 };
