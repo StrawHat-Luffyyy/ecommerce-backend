@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import prisma from "../config/db.js";
 import { generateToken } from "../utils/jwt.js";
-import { use } from "react";
+
 
 export const register = async (req, res) => {
   try {
@@ -96,4 +96,31 @@ export const login = async (req, res) => {
     console.error("Login Error:", error);
     res.status(500).json({ status: "error", message: "Internal Server Error" });
   }
+};
+
+export const getMe = async (req, res) => {
+  res.status(200).json({
+    status: "success",
+    data: {
+      user: req.user, // This comes from the 'protect' middleware!
+    },
+  });
+};
+
+export const logout = async (req, res) => {
+  if (req.user) {
+    await prisma.user.update({
+      where: { id: req.user.id },
+      data: { refreshToken: null },
+    });
+  }
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV == "production",
+    samesite: "strict",
+  });
+  res.status(200).json({
+    status: "success",
+    message: "Logged out successfully",
+  });
 };
