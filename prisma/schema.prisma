@@ -11,20 +11,48 @@ datasource db {
 
 // User Model
 model User {
-  id              String    @id @default(uuid())
-  email           String    @unique
-  password        String
-  firstName       String?
-  lastName        String?
-  role            Role      @default(CUSTOMER)
-  
-  isVerified      Boolean   @default(false)
-  refreshToken    String?
-  
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id        String  @id @default(uuid())
+  email     String  @unique
+  password  String
+  firstName String?
+  lastName  String?
+  role      Role    @default(CUSTOMER)
+
+  isVerified   Boolean @default(false)
+  refreshToken String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+// Product Model
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Decimal  @db.Decimal(10, 2)
+  stock       Int
+  images      String[] //Array of URl strings
+
+  //Relations
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("products")
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  products  Product[] // One category has many products
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("categories")
 }
 
 enum Role {
