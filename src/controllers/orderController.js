@@ -76,24 +76,27 @@ export const createOrder = async (req, res) => {
     // Clear redis cart after successful transaction
     await redisClient.del(cartKey);
     const paymentIntent = await stripe.paymentIntents.create({
-      amount : Math.round(totalAmount * 100),
-      currency:'usd',
+      amount: Math.round(totalAmount * 100),
+      currency: "usd",
       metadata: {
-        orderId : order.id,
-        userId : userId
-      }
-    })
+        orderId: order.id,
+        userId: userId,
+      },
+    });
     res.status(201).json({
       status: "success",
       data: {
         order,
-        clientSecret : paymentIntent.client_secret
-      }
+        clientSecret: paymentIntent.client_secret,
+      },
     });
   } catch (error) {
     console.error("Create Order Error:", error);
     res
       .status(500)
-      .json({ status: "error", message: error.message || "Failed to create order" });
+      .json({
+        status: "error",
+        message: error.message || "Failed to create order",
+      });
   }
 };
