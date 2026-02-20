@@ -3,3 +3,6 @@ node_modules/
 dist/
 coverage/
 .DS_Store
+.postman
+postman/collections/E-Commerce Backend API.postman_collection.json
+postman/globals/workspace.postman_globals.json

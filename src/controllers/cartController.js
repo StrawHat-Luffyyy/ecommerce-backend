@@ -81,9 +81,7 @@ export const removeFromCart = async (req, res) => {
         .json({ status: "error", message: "Cart not found" });
     }
     let cart = JSON.parse(cartData);
-    cart.items = cart.items.filter(
-      (item) => item.productId !== Number(productId),
-    );
+    cart.items = cart.items.filter((item) => item.productId !== productId);
     await redisClient.setEx(cartKey, CART_EXPIRATION, JSON.stringify(cart));
     res.status(200).json({ status: "success", data: cart });
   } catch (error) {

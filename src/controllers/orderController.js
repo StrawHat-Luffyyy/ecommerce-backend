@@ -1,5 +1,6 @@
 import prisma from "../config/db.js";
 import redisClient from "../config/redis.js";
+import stripe from "../config/stripe.js";
 
 // @desc    Create new order from Cart
 // @route   POST /api/orders
@@ -74,9 +75,20 @@ export const createOrder = async (req, res) => {
     });
     // Clear redis cart after successful transaction
     await redisClient.del(cartKey);
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount : Math.round(totalAmount * 100),
+      currency:'usd',
+      metadata: {
+        orderId : order.id,
+        userId : userId
+      }
+    })
     res.status(201).json({
       status: "success",
-      data: order,
+      data: {
+        order,
+        clientSecret : paymentIntent.client_secret
+      }
     });
   } catch (error) {
     console.error("Create Order Error:", error);
