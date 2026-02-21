@@ -6,7 +6,8 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
-import orderRoutes from './routes/orderRoutes.js'
+import orderRoutes from "./routes/orderRoutes.js";
+import webhookRoutes from "./routes/webhookRoutes.js";
 
 const app = express();
 
@@ -18,6 +19,11 @@ app.use(
   }),
 );
 app.use(morgan("dev"));
+app.use(
+  "/api/webhooks",
+  express.raw({ type: "application/json" }),
+  webhookRoutes,
+);
 app.use(express.json());
 app.use(cookieParser());
 
