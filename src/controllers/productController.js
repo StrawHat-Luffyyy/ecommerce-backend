@@ -108,3 +108,85 @@ export const getProductById = async (req, res) => {
     res.status(500).json({ status: "error", message: "Server Error" });
   }
 };
+
+// @desc    Create a new product
+// @route   POST /api/products
+// @access  Private/Admin
+
+export const createProduct = async (req, res) => {
+  try {
+    const { name, description, price, stock, categoryId, images } = req.body;
+    await prisma.product.create({
+      data: {
+        name,
+        description,
+        price,
+        stock,
+        categoryId,
+        images: images || [],
+      },
+    });
+  } catch (error) {
+    console.error("Create Product Error:", error);
+    res
+      .status(500)
+      .json({ status: "error", message: "Failed to create product" });
+  }
+};
+
+// @desc    Update a product
+// @route   PUT /api/products/:id
+// @access  Private/Admin
+
+export const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, description, price, stock, categoryId, images } = req.body;
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: {
+        name,
+        description,
+        price,
+        stock,
+        categoryId,
+        images,
+      },
+    });
+    res.status(200).json({ status: "success", data: updatedProduct });
+  } catch (error) {
+    if (error.code === "P2025") {
+      return res
+        .status(404)
+        .json({ status: "error", message: "Product not found" });
+    }
+    res
+      .status(500)
+      .json({ status: "error", message: "Failed to update product" });
+  }
+};
+
+// @desc    Delete a product
+// @route   DELETE /api/products/:id
+// @access  Private/Admin
+
+export const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.product.delete({
+      where: { id },
+    });
+    res
+      .status(200)
+      .json({ status: "success", message: "Product deleted successfully" });
+  } catch (error) {
+    if (error.code === "P2025") {
+      return res
+        .status(404)
+        .json({ status: "error", message: "Product not found" });
+    }
+    res
+      .status(500)
+      .json({ status: "error", message: "Failed to delete product" });
+  }
+};

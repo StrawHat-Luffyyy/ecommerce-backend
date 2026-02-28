@@ -95,7 +95,7 @@ export const updateOrderStatus = async (req, res) => {
     if (!validStatus.includes(status)) {
       return res.status(400).json({
         status: "error",
-        message: `Invalid status. Must be one of: ${validStatuses.join(", ")}`,
+        message: `Invalid status. Must be one of: ${validStatus.join(", ")}`,
       });
     }
     const updatedOrder = await prisma.order.update({
