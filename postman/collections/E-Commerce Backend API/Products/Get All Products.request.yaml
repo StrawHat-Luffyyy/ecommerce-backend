@@ -1,0 +1,30 @@
+$kind: http-request
+url: "{{baseUrl}}/api/products?page=1&limit=10&category=&search=&minPrice=&maxP\
+  rice=&sortBy=createdAt&sortOrder=desc"
+method: GET
+queryParams:
+  - key: page
+    value: "1"
+    description: Page number
+  - key: limit
+    value: "10"
+    description: Items per page
+  - key: category
+    value: ""
+    description: Filter by category
+  - key: search
+    value: ""
+    description: Search in name and description
+  - key: minPrice
+    value: ""
+    description: Minimum price filter
+  - key: maxPrice
+    value: ""
+    description: Maximum price filter
+  - key: sortBy
+    value: createdAt
+    description: Sort by field (price, name, createdAt)
+  - key: sortOrder
+    value: desc
+    description: Sort order (asc, desc)
+order: 1000

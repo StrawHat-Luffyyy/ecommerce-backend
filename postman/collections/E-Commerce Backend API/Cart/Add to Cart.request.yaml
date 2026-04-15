@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/api/cart"
+method: POST
+headers:
+  Authorization: Bearer {{token}}
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "productId": "65471729-b35a-4178-9efc-f9d9e35b17c2",
+      "quantity": 1
+    }
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZGU5NjliLTg5ODctNGQ3My1iMDU5LTRhYmY2NWNlMjE1MyIsImlhdCI6MTc3MTU5NzQwMiwiZXhwIjoxNzcxNTk4MzAyfQ.wcgLCgouGE8pFQCOKozzh9XYbs5lmsiL_eSDBGldy1Q
+order: 2000

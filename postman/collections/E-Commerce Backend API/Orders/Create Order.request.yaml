@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{baseUrl}}/api/orders"
+method: POST
+headers:
+  Authorization: Bearer {{token}}
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "shippingAddress": "123 Main St, City, State 12345"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZGU5NjliLTg5ODctNGQ3My1iMDU5LTRhYmY2NWNlMjE1MyIsImlhdCI6MTc3MTU5NzQwMiwiZXhwIjoxNzcxNTk4MzAyfQ.wcgLCgouGE8pFQCOKozzh9XYbs5lmsiL_eSDBGldy1Q
+order: 1000

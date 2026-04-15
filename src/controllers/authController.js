@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import prisma from "../config/db.js";
 import { generateToken } from "../utils/jwt.js";
+import jwt from "jsonwebtoken";
 
 
 export const register = async (req, res) => {
@@ -123,4 +124,42 @@ export const logout = async (req, res) => {
     status: "success",
     message: "Logged out successfully",
   });
+};
+
+export const refreshToken = async (req, res) => {
+  try {
+    const token = req.cookies?.refreshToken;
+    if (!token) {
+      return res.status(401).json({ status: "error", message: "No refresh token provided" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    const user = await prisma.user.findUnique({ where: { id: decoded.id } });
+
+    if (!user || user.refreshToken !== token) {
+      return res.status(401).json({ status: "error", message: "Invalid refresh token" });
+    }
+
+    const { accessToken, refreshToken: newRefreshToken } = generateToken(user.id);
+    
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken: newRefreshToken },
+    });
+
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: { accessToken },
+    });
+  } catch (error) {
+    console.error("Refresh Token Error:", error);
+    res.status(401).json({ status: "error", message: "Invalid or expired refresh token" });
+  }
 };

@@ -4,6 +4,7 @@ import {
   login,
   getMe,
   logout,
+  refreshToken,
 } from "../controllers/authController.js";
 import { protect, authorize } from "../middlewares/authMiddleware.js";
 import { registrationSchema, loginSchema } from "../utils/validationSchema.js";
@@ -13,6 +14,7 @@ const router = express.Router();
 
 router.post("/register", validate(registrationSchema), register);
 router.post("/login", validate(loginSchema), login);
+router.post("/refresh", refreshToken);
 
 // Protected Routes
 router.get("/me", protect, getMe);

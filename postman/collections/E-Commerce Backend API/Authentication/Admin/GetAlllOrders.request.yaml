@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{baseUrl}}/api/admin/orders"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZGU5NjliLTg5ODctNGQ3My1iMDU5LTRhYmY2NWNlMjE1MyIsImlhdCI6MTc3MjAzMzQ5OCwiZXhwIjoxNzcyMDM0Mzk4fQ.FRgVsjduSe68jdT1UpRhEFCsz6pTIKbGrAJtXkDnNdg
+order: 2000

@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{baseUrl}}/api/cart/174eaeb7-7de6-4a17-aa18-d0f70ace9d66"
+method: DELETE
+headers:
+  Authorization: Bearer {{token}}
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZGU5NjliLTg5ODctNGQ3My1iMDU5LTRhYmY2NWNlMjE1MyIsImlhdCI6MTc3MTU5NzQwMiwiZXhwIjoxNzcxNTk4MzAyfQ.wcgLCgouGE8pFQCOKozzh9XYbs5lmsiL_eSDBGldy1Q
+order: 3000

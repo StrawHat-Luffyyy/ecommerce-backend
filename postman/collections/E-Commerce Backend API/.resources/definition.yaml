@@ -1,0 +1,10 @@
+$kind: collection
+description: Complete API collection for E-Commerce Backend with Auth, Products,
+  Cart, and Orders
+variables:
+  baseUrl: http://localhost:5000
+  token: ""
+auth:
+  - id: b16dafc6-6637-4d52-b13d-9822954fd8c7
+    type: bearer
+    name: bearer auth

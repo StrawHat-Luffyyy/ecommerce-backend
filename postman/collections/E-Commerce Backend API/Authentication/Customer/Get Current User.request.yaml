@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{baseUrl}}/api/auth/me"
+method: GET
+headers:
+  Authorization: Bearer {{token}}
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZGU5NjliLTg5ODctNGQ3My1iMDU5LTRhYmY2NWNlMjE1MyIsImlhdCI6MTc3MTU5MzgzMSwiZXhwIjoxNzcxNTk0NzMxfQ.5NzjzgelvW2SmxUtu1_DXQ7KPh36KYSJrzjpW7eU42E
+order: 2000
