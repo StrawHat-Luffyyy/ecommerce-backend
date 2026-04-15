@@ -93,10 +93,39 @@ export const createOrder = async (req, res) => {
   } catch (error) {
     console.error("Create Order Error:", error);
     res
-      .status(500)
       .json({
         status: "error",
         message: error.message || "Failed to create order",
       });
+  }
+};
+
+// @desc    Get user's orders
+// @route   GET /api/orders
+// @access  Private
+
+export const getUserOrders = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const orders = await prisma.order.findMany({
+      where: { userId },
+      include: {
+        items: {
+          include: {
+            product: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+    res.status(200).json({
+      status: "success",
+      data: { orders },
+    });
+  } catch (error) {
+    console.error("Get User Orders Error:", error);
+    res.status(500).json({ status: "error", message: "Failed to get orders" });
   }
 };

@@ -2,12 +2,17 @@ import { useEffect, type JSX } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/authStore";
-
-// Placeholder for pages we will build in Phase 4
-const Home = () => <div className="p-8 text-center text-2xl font-bold">Home Page</div>;
-const Login = () => <div className="p-8 text-center text-xl">Login Page</div>;
-const Register = () => <div className="p-8 text-center text-xl">Register Page</div>;
-const Dashboard = () => <div className="p-8 text-center text-xl">Customer Dashboard</div>;
+import { Navbar } from "./components/Navbar";
+import { Home } from "./pages/Home";
+import { Products } from "./pages/Products";
+import { ProductDetails } from "./pages/ProductDetails";
+import { Login } from "./pages/Login";
+import { Register } from "./pages/Register";
+import { Cart } from "./pages/Cart";
+import { Checkout } from "./pages/checkout/Checkout";
+import { StripeSuccess } from "./pages/checkout/StripeSuccess";
+import { StripeCancel } from "./pages/checkout/StripeCancel";
+import { CustomerDashboard } from "./pages/CustomerDashboard";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated, isLoading } = useAuthStore();
@@ -30,23 +35,24 @@ function App() {
     <>
       <Toaster position="top-right" />
       <div className="min-h-screen flex flex-col bg-gray-50">
-        {/* Placeholder Navbar */}
-        <header className="bg-white shadow">
-          <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between">
-            <h1 className="text-xl font-bold text-gray-900">E-Commerce</h1>
-          </div>
-        </header>
+        <Navbar />
 
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+            <Route path="/checkout/success" element={<ProtectedRoute><StripeSuccess /></ProtectedRoute>} />
+            <Route path="/checkout/cancel" element={<ProtectedRoute><StripeCancel /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route 
               path="/dashboard" 
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <CustomerDashboard />
                 </ProtectedRoute>
               } 
             />
